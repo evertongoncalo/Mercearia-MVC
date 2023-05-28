@@ -1,4 +1,4 @@
-"""A model é onde defini-se as caracteristicas dos dados por meio das classes, entenda-se como os tipos que serão guardados no banco de dados"""
+"""A model é onde defini-se as caracteristicas dos dados por meio das classes, entenda-se como os tipos que serão guardados no banco de dados dos sujeitos e ações"""
 
 from datetime import datetime
 
@@ -24,12 +24,39 @@ class Estoque:
         
         
 class Venda:
-    def __init__(self, item_vendido:Produtos, quantidade_vendida, vendedor, comprador):
+    def __init__(self, item_vendido:Produtos, quantidade_vendida, vendedor, comprador, data=datetime.now()):
         self.item_vendido = item_vendido
         self.quantidade_vendida = quantidade_vendida
         self.vendedor = vendedor
         self.comprador = comprador
-        self.data = datetime
+        self.data = data
+        
+class Fornecedor:
+    def __init__(self, empresa, telefone, nif, categoria):
+        self.empresa = empresa
+        self.telefone = telefone
+        self.nif = nif
+        self.categoria = categoria
+        
+class Pessoa:
+    def __init__(self, nome, nif, endereco, telefone, email):
+        self.nome = nome
+        self.nif = nif
+        self.endereço = endereco
+        self.telefone = telefone
+        self.email = email
+        
+class Cliente(Pessoa):
+    def __init__(self, nome, nif, endereco, telefone, email):
+        super(Cliente, self).__init__(nome, nif, endereco, telefone, email)
+
+
+class Vendedor(Pessoa):
+    def __init__(self, nome, nif, endereco, telefone, email, id_vendedor):
+        self.id_vendedor = id_vendedor
+        super(Vendedor, self).__init__(nome, nif, endereco, telefone, email)
+       
+        
         
 
         
