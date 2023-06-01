@@ -14,11 +14,47 @@ class ControllerCategoria:
             print("Categori salva com sucesso")
         else:
             print("Categoria já Existe")
+            
+    def remover_categoria(self, remove_cat):
+        x = DaoCategoria.ler()
+        cat = list(filter(lambda x: x.categoria == remove_cat, x))
+        
+        if len(cat) <= 0:
+            print('A categoria não existe')
+        else:
+            for i in range(len(x)):
+                if x[i].categoria == remove_cat:
+                    del x[i]
+                    break
+            print('Categoria removida com sucesso')
+        with open ('dados/categoria.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.categoria)
+                arq.writelines("\n")
                 
+    def alterar_categoria(self, categoria_alterar, cat_alterada):
+        x = DaoCategoria.ler()
+        cat = list(filter(lambda x: x.categoria == categoria_alterar, x))
+        
+        if len(cat) > 0:
+            cat1 = list(filter(lambda x: x.categoria == cat_alterada, x))
+            if len(cat1) == 0:
+                x = list(map(lambda x: Categoria(cat_alterada) if (x.categoria == categoria_alterar)else(x), x))
+                print(f'Categoria alterada com sucesso, de: {categoria_alterar} para: {cat_alterada}')
+            else:
+                print('A Categoria já existe')
+                
+        else:
+            print('A Categoria não existe')
+        with open ('dados/categoria.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.categoria)
+                arq.writelines("\n")
+               
 
 
 
 a = ControllerCategoria()
 
-a.cadastra_categoria("Frutas")         
+a.alterar_categoria("carnes", "frutcarnes")         
                 
