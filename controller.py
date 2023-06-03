@@ -52,9 +52,17 @@ class ControllerCategoria:
                 arq.writelines("\n")
                
 
-
+    def mostrar_categoria(self):
+        categoria = DaoCategoria.ler()
+        
+        if len(categoria) == 0:
+            print("Categorias Vazia")
+                
+        else:
+            for i in categoria:
+                print(i.categoria)
 
 a = ControllerCategoria()
 
-a.alterar_categoria("carnes", "frutcarnes")         
+a.mostrar_categoria()      
                 
