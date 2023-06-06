@@ -80,9 +80,31 @@ class ControllerEstoque:
                 print("Produto já existe!")
         else:
             print("Categoria não existe")
-
+            
+            
+    def remover_produto(self, nome): #parametro de por onde deseja remover
+        x = DaoEstoque.ler()
+        est = list(filter(lambda x: x.produto.nome == nome, x))
+        
+        if len(est) > 0:
+            for i in range(len(x)):
+                if x[i].produto.nome == nome:
+                    del x[i]
+                    break 
+            print("produto removido com sucesso")              
+            
+        else:
+            print('produto não existe')
+            
+        with open('dados/estoque.txt', 'w') as arq:
+            for i in x:
+                arq.writelines(i.produto.nome + "|" + i.produto.descricao + "|" + str(i.produto.preco) + "|" + i.produto.categoria + "|" + str(i.quantidade) + "|" + i.fornecedor)
+                arq.writelines("\n")
+            
+        
 a = ControllerEstoque()
-a.cadastrar_produto("Arroz", "parboilizado", 5, "frutcarnes", 10, "Bonanca")
+a.remover_produto("Arroz")
+
 
     
 

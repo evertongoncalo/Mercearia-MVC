@@ -57,7 +57,7 @@ class DaoEstoque:
             
             est = []  # Crie uma lista vazia para armazenar as estoques
             for i in cls.estoque:
-                est.append(Estoque(Produtos(i[0], i[1], i[2], i[3]), i[4], i[5], i[6]))
+                est.append(Estoque(Produtos(i[0], i[1], i[2], i[3]), i[4], i[5]))
             return est
 
         
