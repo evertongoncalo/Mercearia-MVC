@@ -22,11 +22,12 @@ class Fornecedor:
         self.categoria = categoria
         
 class Estoque:
-    def __init__(self, produto:Produtos, quantidade, fornecedor, status):
+    def __init__(self, produto:Produtos, quantidade, fornecedor):
         self.produto = produto
         self.quantidade = quantidade
         self.fornecedor = fornecedor
-        self.status = status
+        
+
         
         
 class Venda:

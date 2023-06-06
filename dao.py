@@ -45,7 +45,7 @@ class DaoEstoque:
     @classmethod
     def salvar(cls, estoque: Estoque):  #aqui +assa a instancia da model
         with open('dados/estoque.txt', 'a') as arq:
-            arq.writelines(estoque.produto.nome + "|" + estoque.produto.descricao + "|" + str(estoque.produto.preco) + "|" + estoque.produto.categoria + "|" + str(estoque.quantidade) + "|" + estoque.fornecedor + "|" + estoque.status)
+            arq.writelines(estoque.produto.nome + "|" + estoque.produto.descricao + "|" + str(estoque.produto.preco) + "|" + estoque.produto.categoria + "|" + str(estoque.quantidade) + "|" + estoque.fornecedor)
             arq.writelines("\n")
     @classmethod
     def ler(cls):
