@@ -102,10 +102,81 @@ class ControllerEstoque:
                 arq.writelines("\n")
             
         
-a = ControllerEstoque()
-a.remover_produto("Arroz")
+    def alterar_produtos(self, nomeAlterar, novoNome, novaDesc, novoPreco, novaCategoria, novaQuantidade, novoFornecedor):
+        x = DaoEstoque.ler()
+        y = DaoCategoria.ler()
+        h = list(filter(lambda x: x.categoria == novaCategoria, y))
+        if len(h)>0: #Se for mairo que zero é porque existe a categoria.
+            est = list(filter(lambda x: x.produto.nome == nomeAlterar, x))
+            if len(est)>0:
+                est = list(filter(lambda x: x.produto.nome == novoNome, x))
+                if len(est) == 0:
+                    x = list(map(lambda x: Estoque(Produtos(novoNome,novaDesc,novoPreco,novaCategoria),novaQuantidade,novoFornecedor) if (x.produto.nome == nomeAlterar) else (x),x))
+                    print("produto Alterado com sucesso")
+                else:
+                    print('O produto já existe')
+                    
+                with open('dados/estoque.txt', 'w') as arq:
+                    for i in x:
+                        arq.writelines(i.produto.nome + "|" + i.produto.descricao + "|" + str(i.produto.preco) + "|" + i.produto.categoria + "|" + str(i.quantidade) + "|" + i.fornecedor)
+                        arq.writelines("\n")                  
+                    
+            else:
+                print('O produto não existe')
+        else:
+            print("categoria inexistente")
+    
+    def mostrar_estoque(self):
+        est = DaoEstoque.ler()
+        
+        if len(est) == 0:
+            print("Estoque Vazio")
+                
+        else:
+            for i in est:
+                print(i.produto.nome + "|" + i.produto.descricao + "|" + str(i.produto.preco) + "|" + i.produto.categoria + "|" + str(i.quantidade) + "|" + i.fornecedor)
 
 
+class ControllerVenda:
+    def cadastrar_venda(self, nomeProduto, vendedor, comprador, quantidadeVendida):
+        x = DaoEstoque.ler()
+        temp = []
+        existe = False
+        quantidade = False
+        
+        for i in x:
+            if existe == False:
+                if i.produto.nome == nomeProduto:
+                    existe = True
+                    if int(i.quantidade) >= quantidadeVendida:
+                        quantidade = True
+                        i.quantidade = int(i.quantidade) - quantidadeVendida
+                        
+                        vendido = Venda(Produtos(i.produto.nome,i.produto.descricao,i.produto.preco,i.produto.categoria),quantidadeVendida,vendedor,comprador)
+                        valorCompra = int(quantidadeVendida) * int(i.produto.preco)
+                        DaoVenda.salvar(vendido)
+                        
+        temp.append([Produtos(i.produto.nome,i.produto.descricao,i.produto.preco,i.produto.categoria), i.quantidade])
+        arq = open('dados/venda.txt', 'w')
+        arq.write('')
+        for i in temp:
+            with open('estoque.txt','a') as arq:
+                arq.writelines(i[0].nome + "|" + i[0].preco + "|" + i[0].categoria + "|" + str([i[1]]))
+                arq.writelines("\n")
+                
+        if existe == False:
+            print("O produto não existe")
+            return None
+        
+        elif not quantidade:
+            print("A quantidade vendida não tem em estoque")
+
+        else:
+            return valorCompra
+            
+            
+a = ControllerVenda()
+a.cadastrar_venda("Arroz","rui","Everton",1)
     
 
    

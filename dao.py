@@ -38,7 +38,7 @@ class DaoVenda:
             
             vend = []  # Crie uma lista vazia para armazenar as vendas
             for i in cls.venda:
-                vend.append(Venda(Produtos(i[0], i[1], i[2], i[3]), i[4], i[5], i[6]))
+                vend.append(Venda(Produtos(i[0], i[1], i[2], int(i[3])), int(i[4]), i[5], i[6]))
             return vend
         
 class DaoEstoque:
