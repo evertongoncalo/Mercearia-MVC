@@ -143,36 +143,62 @@ class ControllerVenda:
         temp = []
         existe = False
         quantidade = False
-        
+
         for i in x:
             if existe == False:
                 if i.produto.nome == nomeProduto:
                     existe = True
                     if int(i.quantidade) >= quantidadeVendida:
                         quantidade = True
-                        i.quantidade = int(i.quantidade) - quantidadeVendida
-                        
+                        i.quantidade = int(i.quantidade) - int(quantidadeVendida)
+
                         vendido = Venda(Produtos(i.produto.nome,i.produto.descricao,i.produto.preco,i.produto.categoria),quantidadeVendida,vendedor,comprador)
                         valorCompra = int(quantidadeVendida) * int(i.produto.preco)
                         DaoVenda.salvar(vendido)
-                        
-        temp.append([Produtos(i.produto.nome,i.produto.descricao,i.produto.preco,i.produto.categoria), i.quantidade])
-        arq = open('dados/venda.txt', 'w')
-        arq.write('')
+
+            temp.append([Produtos(i.produto.nome,i.produto.descricao,i.produto.preco,i.produto.categoria), i.quantidade, i.fornecedor])
+
         for i in temp:
-            with open('estoque.txt','a') as arq:
-                arq.writelines(i[0].nome + "|" + i[0].preco + "|" + i[0].categoria + "|" + str([i[1]]))
+            with open('dados/estoque.txt','w') as arq:
+                arq.writelines(i[0].nome + "|" + i[0].descricao + "|" + str(i[0].preco) + "|" + i[0].categoria + "|" + str(i[1]) + "|" + i[2])
                 arq.writelines("\n")
-                
+
         if existe == False:
             print("O produto não existe")
             return None
-        
         elif not quantidade:
-            print("A quantidade vendida não tem em estoque")
-
+            print("A quantidade vendida não está disponível em estoque")
         else:
             return valorCompra
+
+
+    def relatorio_produtos(self):
+        """
+        Gera um relatório de produtos com base nos dados de vendas.
+        
+        Esta função lê os dados de vendas de um objeto de acesso a dados (DaoVenda),
+        calcula a quantidade total vendida para cada produto e gera um relatório
+        na forma de uma lista de dicionários, onde cada dicionário representa um
+        produto e sua respectiva quantidade total vendida.
+        
+        Retorna:
+            list: Uma lista de dicionários representando os produtos e suas
+            respectivas quantidades totais vendidas.
+        """
+        vendas = DaoVenda.ler()
+        produtos = []
+        
+        for i in vendas:
+            nome = i.item_vendido.nome
+            quantidade = i.quantidade_vendida
+            tamanho = list(filter(lambda x: x['produto'] == nome, produtos))
+            if len(tamanho) >0:
+                produtos = list(map(lambda x: {'produto' : nome, 'quantidade' : x['quantidade'] + quantidade} if (x['produto'] == nome) else(x), produtos ))
+            else:
+                produtos.append({'produto' : nome, 'quantidade' : quantidade})
+                
+            ordenar = sorted(produtos, key=lambda k: k['quantidade'], reverse=True) #ordena a lista pela quantidade de forma reversa
+
             
             
 a = ControllerVenda()
